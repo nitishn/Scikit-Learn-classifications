@@ -16,11 +16,11 @@ def neigh():
 ##########################################################################
 ############## Dataset A                     #############################
 ########################################################################## 
-    i = datasets.make_classification(n_samples=100, n_features=2, n_informative=1, n_redundant=0, n_repeated=0, n_classes=2, n_clusters_per_class=1, weights=None, flip_y=0.01, class_sep=1.0, hypercube=True, shift=0.0, scale=1.0, shuffle=True, random_state=None)
-    j = datasets.make_classification(n_samples=100, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=4, n_clusters_per_class=1, weights=None, flip_y=0.01, class_sep=1.0, hypercube=True, shift=0.0, scale=1.0, shuffle=True, random_state=None)
+    i = datasets.make_classification(n_samples=400, n_features=2, n_informative=1, n_redundant=0, n_repeated=0, n_classes=2, n_clusters_per_class=1, weights=None, flip_y=0.01, class_sep=1.0, hypercube=True, shift=0.0, scale=1.0, shuffle=True, random_state=None)
+    j = datasets.make_classification(n_samples=300, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=4, n_clusters_per_class=1, weights=None, flip_y=0.01, class_sep=1.0, hypercube=True, shift=0.0, scale=1.0, shuffle=True, random_state=None)
     k = datasets.make_classification(n_samples=100, n_features=200, n_informative=2, n_redundant=2, n_repeated=0, n_classes=2, n_clusters_per_class=2, weights=None, flip_y=0.01, class_sep=1.0, hypercube=True, shift=0.0, scale=1.0, shuffle=True, random_state=None)   
     
-    n_neighbors = 20
+    n_neighbors = 2
     
     X = i[0]
     y = i[1]    
@@ -50,7 +50,7 @@ def neigh():
     
         # Plot also the training points
         pl.scatter(X[:, 0], X[:, 1], c=y, cmap=cmap_bold)
-        pl.title(" Nearest Neighbor 2-Class classification (k = %i, weights = '%s')"
+        pl.title(" Nearest Neighbor 2D, 2-Class classification (k = %i, weights = '%s')"
                  % (n_neighbors, weights))
         pl.axis('tight')
 
@@ -85,14 +85,23 @@ def neigh():
     
         # Plot also the training points
         pl.scatter(X[:, 0], X[:, 1], c=y, cmap=cmap_bold)
-        pl.title("Nearest Neighbor 4-Class classification (k = %i, weights = '%s')"
+        pl.title("Nearest Neighbor 2D, 4-Class classification (k = %i, weights = '%s')"
                  % (n_neighbors, weights))
         pl.axis('tight')
         
 ##########################################################################
 ############## Dataset C                     #############################
 ##########################################################################
-    
+    X = k[0]
+    y = k[1]    
+    h = .02  # step size in the mesh
+
+    for weights in ['uniform']:
+        # we create an instance of Neighbours Classifier and fit the data.
+        clf = neighbors.KNeighborsClassifier(n_neighbors, weights=weights)
+        clf.fit(X, y)        
+
+        
 def reg():     
     i = datasets.make_classification(n_samples=100, n_features=2, n_informative=1, n_redundant=0, n_repeated=0, n_classes=2, n_clusters_per_class=1, weights=None, flip_y=0.01, class_sep=1.0, hypercube=True, shift=0.0, scale=1.0, shuffle=True, random_state=None)
     j = datasets.make_classification(n_samples=100, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=4, n_clusters_per_class=1, weights=None, flip_y=0.01, class_sep=1.0, hypercube=True, shift=0.0, scale=1.0, shuffle=True, random_state=None)
@@ -113,7 +122,7 @@ def reg():
     cs = l1_min_c(X, y, loss='log') * np.logspace(0, 3)
 
 
-    print "Computing regularization path 2 classes..."
+    print "Computing regularization path 2D, 2 classes..."
     start = datetime.now()
     clf = LogisticRegression(C=1.0, penalty='l1', tol=1e-6)
     coefs_ = []
@@ -129,7 +138,7 @@ def reg():
     ymin, ymax = pl.ylim()
     pl.xlabel('log(C)')
     pl.ylabel('Coefficients')
-    pl.title('Logistic Regression Path')
+    pl.title('Logistic Regression Path 2D, 2-Classes')
     pl.axis('tight')
     
     
@@ -146,7 +155,7 @@ def reg():
     
     cs = l1_min_c(X, y, loss='log') * np.logspace(0, 3)
 
-    print "Computing regularization path 4 classes..."
+    print "Computing regularization path 2D, 4 classes..."
     start = datetime.now()
     clf = LogisticRegression(C=1.0, penalty='l1', tol=1e-6)
     coefs_ = []
@@ -162,13 +171,13 @@ def reg():
     ymin, ymax = pl.ylim()
     pl.xlabel('log(C)')
     pl.ylabel('Coefficients')
-    pl.title('Logistic Regression Path')
+    pl.title('Logistic Regression Path 2D, 4 classes')
     pl.axis('tight')
        
 ##########################################################################
 ############## Dataset C                     #############################
 ##########################################################################    
-    X = k[0]
+    ''''X = k[0]
     y = k[1]
     
     X = X[y != 2]
@@ -182,7 +191,7 @@ def reg():
     cs = l1_min_c(X, y, loss='log') * np.logspace(0, 3)
 
 
-    print "Computing regularization path ..."
+    print "Computing regularization path 200D, 2-Classes..."
     start = datetime.now()
     clf = LogisticRegression(C=1.0, penalty='l1', tol=1e-6)
     coefs_ = []
@@ -198,8 +207,8 @@ def reg():
     ymin, ymax = pl.ylim()
     pl.xlabel('log(C)')
     pl.ylabel('Coefficients')
-    pl.title('Logistic Regression Path')
-    pl.axis('tight')
+    pl.title('Logistic Regression Path 200D, 2-Classes')
+    pl.axis('tight')'''
        
        
 def vec():
@@ -250,7 +259,7 @@ def vec():
         # Plot also the training points
         pl.scatter(X[:, 0], X[:, 1], c=Y, cmap=pl.cm.Paired)
     
-        pl.title(titles[i])
+        pl.title(titles[i] + "2D, 2-Classes")
         
 ##########################################################################
 ############## Dataset B                     #############################
@@ -295,10 +304,24 @@ def vec():
         # Plot also the training points
         pl.scatter(X[:, 0], X[:, 1], c=Y, cmap=pl.cm.Paired)
     
-        pl.title(titles[i])
+        pl.title(titles[i] + "2D, 4-Classes")
 ##########################################################################
 ############## Dataset C                     #############################
 ##########################################################################   
+    ''''X = k[0]                           
+    Y = k[1]
+    
+    # we create an instance of SVM and fit out data. We do not scale our
+    # data since we want to plot the support vectors
+    C = 1.0  # SVM regularization parameter
+    svc = svm.SVC(kernel='linear', C=C).fit(X, Y)
+    rbf_svc = svm.SVC(kernel='rbf', gamma=0.7, C=C).fit(X, Y)
+    poly_svc = svm.SVC(kernel='poly', degree=3, C=C).fit(X, Y)
+    lin_svc = svm.LinearSVC(C=C).fit(X, Y)
+
+    for i, clf in enumerate((svc, rbf_svc, poly_svc, lin_svc)):
+        Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])'''
+    
 
    
 def printGraphs():
